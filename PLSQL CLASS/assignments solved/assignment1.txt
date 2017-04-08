@@ -1,0 +1,205 @@
+Practice 4:  
+
+Write a PL/SQL block that accepts values of two non-zero integer numbers from user. The block performs the following operation 
+( first_number/second_number + second_number). The result of the operation should be stored in a PL/SQL variable and also displayed on the screen.
+
+Solution:
+
+DECLARE
+
+    v_no1 number:=&num1;
+    v_no2 number:=&num2;
+    result number;
+BEGIN
+    result:=((v_no1/v_no2)+v_no2);
+    dbms_output.put_line(' the result of the operation is  ' || result);
+END;
+/
+
+
+==============================================================
+Practice 5:
+
+Declare two SQL* plus variables named MAX_SALARY and MIN_SALARY that are of data type NUMBER.
+Write a PL/SQL block that accepts department_id value from a user, selects the maximum salary and minimum salary paid in the department, from the EMPLOYEES table and stores the corresponding values in MAX_SALARY and MIN_SALARY respectively. 
+Use appropriate SQL * plus command to see the modified values of MAX_SALARY and MIN_SALARY
+
+Solution:
+
+DECLARE
+
+   MAX_SALARY number;
+   MIN_SALARY  number;
+   v_deptid number:=&id;
+
+BEGIN
+
+  SELECT max(sal),min(sal) INTO   MAX_SALARY, MIN_SALARY from EMP     WHERE depTNO =v_deptid;
+  dbms_output.put_line(' the maximum and minimum salary is ' ||MAX_SALARY   ||' and '|| MIN_SALARY);
+
+END;
+/
+================================================================
+Practice 6:
+
+Write a PL/SQL block that accepts job_id value from a user, calculates the average salary paid for that job. The code should display the job and the average salary for that job.
+
+Solution:
+
+DECLARE
+
+   v_id number:=& job_id;
+   v_job emp.job%type;
+   v_sal emp.sal%type;
+
+BEGIN
+   
+   SELECT  avg(sal) INTO v_sal from EMP where empno= v_id;
+   dbms_output.put_line('The '|| v_job || 'has average salary' || v_sal );
+
+END;
+/
+
+=================================================================
+Practice 7: 
+
+Write a PL/SQL block that accepts employee_id from a user and retrieves the salary for the employee from the EMPLOYEES table. It determines the salary class as per the following criteria and displays the salary and salary class on the screen
+Criteria for deciding salary class: 
+•	If the salary is less than 2500, then it comes under the class ‘LOW’
+•	If the salary is greater than or equal to 2500 and less than 5000, then it comes under class ‘MEDIUM’.
+•	If the salary is greater than or equal to 5000, then it comes under class ‘HIGH’
+
+Solution:
+
+DECLARE
+
+   v_id number:=&emp_id;
+   v_sal emp.sal%type;
+
+BEGIN
+  
+   SELECT sal into v_sal from EMP where empno=v_id;
+   
+   IF v_sal <2500 then
+   dbms_output.put_line ('The salary of the employee is ' ||v_sal || 'and the class    is LOW');
+   ELSIF
+   v_sal>2500 and v_sal<5000 then
+   dbms_output.put_line ('The salary of the employee is ' ||v_sal || 'and the class      is MEDIUN');
+   ELSIF
+   v_sal>=5000 then
+   dbms_output.put_line ('The salary of the employee is ' ||v_sal || 'and the class      is HIGH');
+   END IF;
+
+END;
+/
+
+=================================================================
+Practice 8:
+
+Write a PL/SQL block that accepts an integer value between 1 and 12 from a user and displays the name of the corresponding month. If the number input is not in the range +1 to +12 then the block should display the message “Invalid Month” on the screen
+
+Solution:
+
+DECLARE
+
+    int number(2):=&value;
+    
+BEGIN
+    
+    IF int = 1 then
+    dbms_output.put_line ('the month is jan');
+    ELSIF  int=2 then
+    dbms_output.put_line ('the month is feb');
+    ELSIF  int=3 then
+    dbms_output.put_line ('the month is mar');
+    ELSIF  int=4 then
+    dbms_output.put_line ('the month is apr');
+     ELSIF  int=5 then
+    dbms_output.put_line ('the month is may');
+     ELSIF  int=6 then
+    dbms_output.put_line ('the month is jun');				     ELSIF  int=7 then
+    dbms_output.put_line ('the month is jul');
+     ELSIF  int=8 then	
+     dbms_output.put_line ('the month is aug');
+      ELSIF  int=9 then
+      dbms_output.put_line ('the month is sep');
+      ELSIF  int=10 then 
+      dbms_output.put_line ('the month is oct');
+       ELSIF  int=11 then 
+       dbms_output.put_line ('the month is nov'); 	
+       ELSIF  int=12 then  
+       dbms_output.put_line ('the month is dec'); 
+       ELSE
+       dbms_output.put_line ('Invalid Month'); 
+       END IF;
+
+END;
+/
+
+=================================================================
+Practice 9: 
+
+Write a PL/SQL block that accepts a positive integer number from a user and displays its factorial on the screen.
+
+Solution:
+
+DECLARE
+
+    n number:=&num;
+    fac number :=1;
+    i number;
+
+BEGIN
+     
+    for i in 1..n
+loop
+    fac:=fac*i;
+end loop;
+     dbms_output.put_line('factorial='||fac);
+
+END;
+/
+   
+
+=================================================================
+Practice 10:
+
+Write a PL/SQL block that accepts Bill_no from a user. Declare a PL/SQL record to store the cust_id, the Plan name, Bill amount and Service name for that Bill_no.  Display the information on the screen.
+
+Solution:
+
+DECLARE
+
+     bill_no number:=&billno;
+     cust_id number:=&id;
+     plan_name varchar2(30):='&plan_name';
+     bill_amt number:=&amt;
+     service_name varchar2(20):='&service _name';
+ 
+BEGIN
+ 
+     SELECT cust_id, the Plan name, Bill amount , Service name INTO  cust_id,plan_name,bill_amt ,service_name where bill number= bill_no;
+     dbms_output.put_line('The cust_id, the Plan name, Bill amount and Service name is ' || cust_id || plan_name||  bill_amt||service_name|| 'for Bill_no '||bill_no );
+
+END;
+/
+
+==================================================================
+Practice 11:
+
+Write a PL/SQL block to add a row in the CUSTOMERS table with the following validations:
+
+a.	The block retrieves the maximum value of cust_id from the customers table and adds 1 to it to generate the value of cust_id 
+b.	Plan_id will be the plan choosen by maimum customers
+c.	Registration_date will be current date
+d.	Next_bill_Date will be after 1 month
+e.	User will enter Payment_mode either
+             a.	Cash
+             b.	Cheque
+             c.	Direct debit
+
+Solution:
+
+
+
+

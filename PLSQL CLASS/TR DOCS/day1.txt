@@ -1,0 +1,147 @@
+
+Class day1 sql
+
+--------------------------------------------------------
+(on oracle sql+ 
+tables present:
+SALGRADE               TABLE
+EMP                            TABLE
+DEPT                          TABLE
+----------------------------------------------
+To display output on the screen:
+set serveroutput on
+----------------------------------------------
+blocks types:1.unanmed block
+                      2.named block
+--------------------------------------------
+SIMPLE CALCULATION
+
+DECLARE
+i number:=&num1;
+j number:=&num2;
+addition number;
+begin
+addition:=i+j;
+dbms_output.put_line('addition of number is'||addition);
+end;
+/
+
+-----------------------------------------------------------
+display details of employee from table
+
+DECLARE
+v_ename varchar2(20);
+v_sal number;
+v_empno number:=&eno;
+begin
+select ename,sal into v_ename,v_sal from EMP where empno=v_empno ;
+dbms_output.put_line('name='||v_ename );
+dbms_output.put_line('salary= '||v_sal);
+end;
+/
+-----------------------------------------------------------------------
+display details of employee from table by using %rowtype
+
+DECLARE
+Rec_Emp emp%rowtype;
+v_empno number :=&eno;
+begin
+select * into Rec_Emp from emp where empno=v_empno;
+dbms_output.put_line('name= '||Rec_Emp.ename);
+dbms_output.put_line('salary='||Rec_Emp.sal);
+end;
+/
+--------------------------------------------------------------------------------
+by using %type
+
+DECLARE
+v_ename emp.ename%type;
+v_sal emp.sal%type;
+v_empno number:= &eno;
+begin
+select ename,sal into v_ename, v_sal from emp where empno=v_empno ;
+dbms_output.put_line('name= '||v_ename);
+dbms_output.put_line('salary= '||v_sal);
+end;
+/
+-----------------------------------------------------------------------
+IF LOOP
+
+DECLARE
+a number :=&num1;
+begin
+if (mod(a,2)=0) then
+dbms_output.put_line(a||'  is even number');
+else
+dbms_output.put_line(a||'  is odd number');
+end if;
+end;
+/
+
+---------------------------------------------------------------
+IF ELSEIF
+
+DECLARE
+a number :=&num1;
+b number:= &num2;
+c number:=&num3;
+begin
+if (a>b and a>c) then
+dbms_output.put_line(a||'is max number');
+elsif(b>c)then
+dbms_output.put_line(b||'is max number');
+else
+dbms_output.put_line(c||'is max number');
+end if;
+end;
+/
+
+--------------------------------------------------------------
+TO DISPLAY SERIES OF NUMBER
+concept of loop
+
+DECLARE
+i number:=1;
+begin
+loop
+exit when (i>5);
+dbms_output.put_line(i);
+i:=i+1;
+end loop;
+end;
+/
+-------------------------------------------------------------
+FOR loop;
+
+begin
+for i in 1..5
+loop
+dbms_output.put_line(i);
+end loop;
+end;
+/
+
+--------------------------------------------
+print in reverse order
+
+begin 
+for i in reverse 1..5
+loop
+dbms_output.put_line(i);
+end loop;
+end;
+/
+
+---------------------------------------------
+To print max salary
+
+DECLARE
+maxsal number;
+begin
+select max(sal) into maxsal from emp;
+dbms_output.put_line('Max salary is= '|| maxsal);
+end;
+/
+
+-------------------------------------------------
+
