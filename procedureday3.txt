@@ -1,0 +1,248 @@
+ PROCEDURES
+------------------------------------------------------------------
+create or replace procedure display_message as
+begin
+dbms_output.put_line( 'hello all');
+end;
+
+execution: execute display_message;
+             OR
+
+execution:  BEGIN
+                    display_message
+                    END;
+
+----------------------------------------------------
+create or replace procedure display_message as
+v_sal emp.sal%type;
+begin
+select sal into v_sal from emp where empno=7876;
+dbms_output.put_line('salary is' ||v_sal);
+end;
+/
+--------------------------------------------------------------
+create or replace procedure display_message as
+v_sal emp.sal%type;
+BEGIN
+select sal into v_sal from emp where empno=76;
+dbms_output.put_line('salary is' ||v_sal);
+EXCEPTION
+when no_data_found then
+dbms_output.put_line(' empno not available');
+END;
+/
+
+---------------------------------------------------------------
+
+create or replace procedure display_message as
+v_sal emp.sal%type;
+BEGIN
+select sal into v_sal from emp where empno=7876;
+dbms_output.put_line('salary is' ||v_sal);
+IF v_sal>20000 then
+dbms_output.put_line('greater than 20000');
+else 
+dbms_output.put_line('less than 20000');
+end if;
+EXCEPTION
+when no_data_found then
+dbms_output.put_line(' empno not available');
+END;
+/
+
+-------------------------------------------------------------
+create or replace procedure get_sal_info (p_empno number) as
+v_sal emp.sal%type;
+BEGIN
+select sal into v_sal from emp where empno=p_empno;
+dbms_output.put_line('salary is' ||v_sal);
+IF v_sal>20000 then
+dbms_output.put_line('greater than 20000');
+else 
+dbms_output.put_line('less than 20000');
+end if;
+EXCEPTION
+when no_data_found then
+dbms_output.put_line(' empno not available');
+END;
+/
+
+
+declare
+v_empno emp.empno%type:=7788;
+begin
+get_sal_info(v_empno);
+end;
+--------------------------------------------------------------
+create or replace procedure dis_msg as
+dept_no number:=&num1;
+cursor c_emp(p_deptno number) is select * from emp where deptno=p_deptno;
+begin
+for v_emp in c_emp(dept_no)
+loop
+dbms_output.put_line('ename='||v_emp.ename||'sal='||v_emp.sal);
+end loop;
+end;
+/
+--------------------------------------------------------------------
+create or replace procedure get_sal_info (p_empno number, p_sal out number) as
+begin
+select sal into p_sal from emp where empno=p_empno;
+dbms_output.put_line('sal = ' || p_sal);
+if p_sal>20000 then
+dbms_output.put_line('greater than 20000');
+else
+dbms_output.put_line('less than 20000');
+end if;
+exception
+when no_data_found then
+dbms_output.put_line(' empno not available');
+END;
+/
+
+
+declare
+var_sal emp.sal%type;
+begin
+ get_sal_info (7788, var_sal);
+dbms_output.put_line(' sal from caller block= ' ||var_sal);
+end;
+/
+
+-------------------------------------------------------------------------------
+create or replace procedure get_sal_info (p_empno number, p_sal  in  out number) as
+begin
+dbms_output.put_line('sal in procedure before modification: '||p_sal);
+select sal into p_sal from emp where empno=p_empno;
+dbms_output.put_line('sal = ' || p_sal);
+if p_sal>20000 then
+dbms_output.put_line('greater than 20000');
+else
+dbms_output.put_line('less than 20000');
+end if;
+exception
+when no_data_found then
+dbms_output.put_line(' empno not available');
+END;
+/
+
+
+declare
+var_sal emp.sal%type:=1000;
+begin
+ get_sal_info (7788, var_sal);
+dbms_output.put_line(' sal from caller block= ' ||var_sal);
+end;
+/
+---------------------------------------------------------------------
+create or replace procedure get_sal_info (p_empno number, p_sal out number) as
+begin
+dbms_output.put_line('sal in procedure before modification: '||p_sal);
+select sal into p_sal from emp where empno=p_empno;
+dbms_output.put_line('sal = ' || p_sal);
+if p_sal>20000 then
+dbms_output.put_line('greater than 20000');
+else
+dbms_output.put_line('less than 20000');
+end if;
+exception
+when no_data_found then
+dbms_output.put_line(' empno not available');
+END;
+/
+
+
+declare
+var_sal emp.sal%type:=1000;
+begin
+ get_sal_info (7788, var_sal);
+dbms_output.put_line(' sal from caller block= ' ||var_sal);
+end;
+/
+
+---------------------------------------------------------------------------
+FUNCTIONS
+---------------------------------------------------------------------------
+create or replace function get_sal (p_empno number) return number as
+v_sal emp.sal%type;
+begin
+
+select sal into v_sal from emp where empno=p_empno;
+dbms_output.put_line('sal = ' || v_sal);
+if v_sal>20000 then
+dbms_output.put_line('greater than 20000');
+else
+dbms_output.put_line('less than 20000');
+end if;
+return v_sal;
+exception
+when no_data_found then
+dbms_output.put_line(' empno not available');
+END;
+/
+
+
+declare
+var_sal emp.sal%type;
+begin
+ var_sal:=get_sal(7788);
+dbms_output.put_line(' sal from caller block= ' ||var_sal);
+end;
+/
+-------------------------------------------------------------------------------------------------------
+select get_sal(7788) from dual;
+
+-------------------------------------------------------------------------------------------------------
+
+create or replace procedure sal_dis (p_empno emp.empno%type) as
+v_sal emp.sal%type;
+begin
+v_sal:=get_sal(p_empno);
+if v_sal>10000 then
+update emp set sal=sal+1000 where empno=p_empno;
+else
+update emp set sal=sal+2000 where empno=p_empno;
+end if;
+end;
+/
+
+---------------------------------------------------------------------------------------------------------------
+calling function in if statement
+
+create or replace procedure sal_dis (p_empno emp.empno%type) as
+
+begin
+
+if get_sal(p_empno)<10000 then
+update emp set sal=sal+1000 where empno=p_empno;
+else
+update emp set sal=sal+2000 where empno=p_empno;
+end if;
+end;
+/
+---------------------------------------------------------------------
+create or replace function get_sal (p_empno emp.empno%type) return boolean as
+v_sal emp.sal%type;
+begin
+select sal into v_sal from emp where empno=p_empno;
+dbms_output.put_line('sal = '||v_sal);
+if v_sal>20000 then
+dbms_output.put_line('greater than 20000');
+return true;
+else
+dbms_output.put_line('less than 20000');
+
+exception
+when no_sata_found then
+dbms_output.put_line('empno not available');
+end;
+
+begin
+if get_sal(7788) then
+dbms_output.put_line ('from caller greater then 20000');
+else
+dbms_output.put_line ('from caller less then 20000');
+end if;
+end;
+/
+--------------------------------------------------------------------------------------

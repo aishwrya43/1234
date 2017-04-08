@@ -1,0 +1,55 @@
+
+q2
+DECLARE
+
+dept_no number :=&num1;
+dept_name varchar2(20) :='&name';
+loc varchar2(20) :='&loc';
+duplicate_dept_no exception;
+pragma exception_init(duplicate_dept_no, -00001);
+begin
+
+insert into dept values(dept_no,dept_name,loc);
+
+exception
+when duplicate_dept_no then
+dbms_output.put_line('unique id found');
+end;
+/
+
+--------------------------------------------
+q1
+create table message(err_message varchar2(250));
+declare
+v_sal number:=&num1;
+emp_name emp.ename%type;
+begin
+select ename into emp_name from emp where sal=v_sal;
+insert into message values(emp_name);
+exception
+when too_many_rows then
+insert into message values('more than one employee with salary of'||v_sal);
+when no_data_found then
+insert into message values('no data found'||v_sal);
+when others then
+insert into message values('other error occured'||v_sal);
+end;
+/
+-------------------------------------------
+q3
+
+declare
+duplicate_job exception;
+v_count number;
+begin
+select count(*) into v_count from emp where lower(job)='president';
+if(v_count>1) then
+raise duplicate_job;
+end if;
+dbms_output.put_line('one president found');
+exception
+when duplicate_job then
+dbms_output.put_line('more than one president');
+end;
+/
+------------------------------------------------

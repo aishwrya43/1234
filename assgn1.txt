@@ -1,0 +1,52 @@
+Assignment day1
+1. valid
+2. not valid only one variable can be declared
+3.valid
+4. invalid in boolean only true false values
+
+2. DECLARE
+v_data NUMBER(7);
+BEGIN
+DBMS_OUTPUT.PUT_LINE(v_data);
+END;
+/
+
+THE OUTPUT IS NULL AS NO VALUES ARE ASIGNED
+
+3. 
+point1:
+2
+western europe
+point2:
+601
+product 10012 is in stock
+
+4.
+declare
+i number:=&num1;
+j number:=&num2;
+result number;
+begin
+result:=(i/j)+j;
+dbms_output.put_line('result is'||result);
+end;
+/
+
+5.
+declare
+max_sal number;
+min_sal number;
+v_deptid number :=&eno;
+begin
+select max(sal) into max_sal from emp group by deptno having deptno=v_deptid;
+select min(sal) into min_sal from emp group by deptno having deptno=v_deptid;
+dbms_output.put_line('max salary= '||max_sal);
+dbms_output.put_line('=min salary '||min_sal);
+end;
+/
+
+6
+declare
+job_id number:=&job
+
+
